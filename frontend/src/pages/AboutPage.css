@@ -1,0 +1,74 @@
+.about-page {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 2rem 3rem; /* More padding */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.company-bio {
+  font-size: 1.1rem;
+  line-height: 1.7; /* Increased line height for readability */
+  margin-bottom: 2.5rem;
+  color: #333;
+}
+
+.about-page h2 {
+  text-align: center;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.hosts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Increased space between host cards */
+}
+
+/* NEW: Styles for the host card to align image and text */
+.host-card {
+  display: flex;
+  align-items: center; /* Vertically centers the image with the text */
+  gap: 1.5rem; /* Space between image and text */
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 5px solid #3498db;
+}
+
+/* NEW: Styles to make the image a perfect, sized circle */
+.host-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%; /* This makes the image circular */
+  object-fit: cover; /* Prevents the image from being stretched */
+  border: 4px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* NEW: A container for the host's text */
+.host-info {
+  flex: 1; /* Allows the text block to take up the remaining space */
+}
+
+.host-info h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+/* 
+  MAKING IT RESPONSIVE: On smaller screens, stack the image
+  on top of the text instead of side-by-side.
+*/
+@media (max-width: 600px) {
+  .host-card {
+    flex-direction: column; /* Stack vertically */
+    text-align: center;
+  }
+
+  .about-page {
+    padding: 1.5rem;
+  }
+}

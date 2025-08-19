@@ -1,0 +1,7 @@
+.app-footer {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #20232a;
+  color: #ccc;
+  margin-top: auto; /* Pushes footer to the bottom */
+}

@@ -1,0 +1,132 @@
+.episodes-page h1, .episodes-page h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.episodes-page section {
+  margin-bottom: 3rem;
+}
+
+.episodes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.episode-item {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.episode-item img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.episode-item h3 {
+  padding: 0 1rem;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  color: #333;
+}
+
+.episode-item .release-date {
+  padding: 0 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.episode-item details {
+  padding: 0 1rem 1rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.episode-item details summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #3498db;
+  padding: 0.5rem 0;
+}
+
+.episode-item .description {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #444;
+}
+
+.episode-item iframe {
+  margin-top: 1rem;
+  border-radius: 8px;
+  border: none;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* Allows buttons to wrap to the next line on small screens */
+  gap: 10px; /* Space between buttons */
+  margin-bottom: 3rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 2rem;
+}
+
+.filter-container p {
+  margin-right: 10px;
+  font-weight: bold;
+  color: #555;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 20px; /* Pill-shaped buttons */
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.filter-btn:hover {
+  background-color: #f0f0f0;
+  border-color: #aaa;
+}
+
+/* Style for the currently active button */
+.filter-btn.active {
+  background-color: #282c34; /* Dark background */
+  color: #fff; /* White text */
+  border-color: #282c34;
+}
+/* --- STYLES FOR SEARCH BAR --- */
+.search-container {
+  margin-bottom: 2.5rem;
+  width: 100%;
+  max-width: 600px; /* Prevents it from being too wide on large screens */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 25px; /* Pill shape */
+  border: 1px solid #ddd;
+  box-sizing: border-box; /* Important for padding and width */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3498db; /* Highlight color on focus */
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
