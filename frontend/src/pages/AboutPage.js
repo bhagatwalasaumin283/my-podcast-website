@@ -14,7 +14,7 @@ const AboutPage = () => {
     useEffect(() => {
         const fetchBio = async () => {
             try {
-                const response = await axios.get('http://localhost:5001/api/bio');
+                const response = await axios.get('/api/bio');
                 setBio(response.data);
             } catch (error) {
                 console.error("Error fetching bio", error);
