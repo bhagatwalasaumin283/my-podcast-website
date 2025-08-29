@@ -26,8 +26,8 @@ const EpisodesPage = () => {
             setLoading(true);
             try {
                 const [spotifyRes, youtubeRes] = await Promise.all([
-                    axios.get('http://localhost:5001/api/spotify-episodes'),
-                    axios.get('http://localhost:5001/api/youtube-videos')
+                    axios.get('/api/spotify-episodes'),
+                    axios.get('/api/youtube-videos')
                 ]);
 
                 if (spotifyRes.data && spotifyRes.data.items) {
