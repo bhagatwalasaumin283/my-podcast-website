@@ -4,50 +4,69 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import './EpisodesPage.css';
 
 const EpisodesPage = () => {
-    // State for the original, complete list of episodes from the API
+    // State for the original, complete lists from the APIs
     const [allSpotifyEpisodes, setAllSpotifyEpisodes] = useState([]);
+    const [allYoutubeVideos, setAllYoutubeVideos] = useState([]);
+    
+    // State for the filtered lists that are actually displayed
+    const [filteredSpotify, setFilteredSpotify] = useState([]);
+    const [filteredYoutube, setFilteredYoutube] = useState([]);
+
     // State to hold the user's current search term
     const [searchQuery, setSearchQuery] = useState('');
-    // State for the filtered list of episodes that will actually be displayed
-    const [filteredEpisodes, setFilteredEpisodes] = useState([]);
+    
+    // State to track the active tab ('spotify' or 'youtube')
+    const [activeView, setActiveView] = useState('spotify'); 
 
     const [loading, setLoading] = useState(true);
 
-    // This effect runs only ONCE to fetch the initial data
+    // This effect runs only ONCE to fetch all initial data
     useEffect(() => {
-        const fetchAllSpotifyEpisodes = async () => {
+        const fetchAllEpisodes = async () => {
             setLoading(true);
             try {
-                const response = await axios.get('http://localhost:5001/api/spotify-episodes');
-                if (response.data && response.data.items) {
-                    // Set both the master list and the initial displayed list
-                    setAllSpotifyEpisodes(response.data.items);
-                    setFilteredEpisodes(response.data.items);
+                const [spotifyRes, youtubeRes] = await Promise.all([
+                    axios.get('http://localhost:5001/api/spotify-episodes'),
+                    axios.get('http://localhost:5001/api/youtube-videos')
+                ]);
+
+                if (spotifyRes.data && spotifyRes.data.items) {
+                    setAllSpotifyEpisodes(spotifyRes.data.items);
+                    setFilteredSpotify(spotifyRes.data.items); // Set initial display list
+                }
+                if (youtubeRes.data && youtubeRes.data.items) {
+                    setAllYoutubeVideos(youtubeRes.data.items);
+                    setFilteredYoutube(youtubeRes.data.items); // Set initial display list
                 }
             } catch (error) {
-                console.error("Failed to fetch Spotify episodes:", error);
+                console.error("Failed to fetch episodes:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchAllSpotifyEpisodes();
+        fetchAllEpisodes();
     }, []);
 
-    // This effect runs whenever the user's search query changes
+    // This effect runs whenever the user types in the search bar
     useEffect(() => {
-        // Create a lowercase version of the query for case-insensitive search
         const lowercasedQuery = searchQuery.toLowerCase();
 
-        const filtered = allSpotifyEpisodes.filter(episode => {
-            // Check if the query is in the episode title OR the description
-            const titleMatch = episode.name.toLowerCase().includes(lowercasedQuery);
-            const descriptionMatch = episode.description.toLowerCase().includes(lowercasedQuery);
-            return titleMatch || descriptionMatch;
-        });
+        // Filter Spotify list
+        const spotifyResults = allSpotifyEpisodes.filter(episode =>
+            episode.name.toLowerCase().includes(lowercasedQuery) ||
+            episode.description.toLowerCase().includes(lowercasedQuery)
+        );
+        setFilteredSpotify(spotifyResults);
 
-        setFilteredEpisodes(filtered);
-    }, [searchQuery, allSpotifyEpisodes]); // Dependency array: re-run when these change
+        // Filter YouTube list
+        const youtubeResults = allYoutubeVideos.filter(video =>
+            video.snippet.title.toLowerCase().includes(lowercasedQuery) ||
+            video.snippet.description.toLowerCase().includes(lowercasedQuery)
+        );
+        setFilteredYoutube(youtubeResults);
+
+    }, [searchQuery, allSpotifyEpisodes, allYoutubeVideos]); // Re-run when query or master lists change
 
     if (loading) {
         return <LoadingSpinner />;
@@ -68,33 +87,72 @@ const EpisodesPage = () => {
                 />
             </div>
 
-            <section>
-                <h2>From Spotify</h2>
-                {filteredEpisodes.length > 0 ? (
-                    <div className="episodes-grid">
-                        {/* We now map over the filteredEpisodes list */}
-                        {filteredEpisodes.map(ep => (
-                            <div key={ep.id} className="episode-item">
-                                <img src={ep.images[1]?.url} alt={ep.name} />
-                                <h3>{ep.name}</h3>
-                                <p className="release-date">{new Date(ep.release_date).toDateString()}</p>
-                                <details>
-                                    <summary>Show Description & Player</summary>
-                                    <p className="description">{ep.description}</p>
-                                    <iframe 
-                                        src={`https://open.spotify.com/embed/episode/${ep.id}`} 
-                                        width="100%" height="152" frameBorder="0" 
-                                        allow="encrypted-media" title={ep.name}>
-                                    </iframe>
-                                </details>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    // Show a helpful message if the search yields no results
-                    <p>No episodes found matching your search for "{searchQuery}".</p>
-                )}
-            </section>
+            {/* --- SUB-NAVIGATION TABS --- */}
+            <div className="view-switcher">
+                <button
+                    className={`view-btn ${activeView === 'spotify' ? 'active' : ''}`}
+                    onClick={() => setActiveView('spotify')}
+                >
+                    Spotify ({filteredSpotify.length})
+                </button>
+                <button
+                    className={`view-btn ${activeView === 'youtube' ? 'active' : ''}`}
+                    onClick={() => setActiveView('youtube')}
+                >
+                    YouTube ({filteredYoutube.length})
+                </button>
+            </div>
+
+            {/* --- CONDITIONAL RENDERING OF FILTERED LISTS --- */}
+            {activeView === 'spotify' && (
+                <section>
+                    <h2>From Spotify</h2>
+                    {filteredSpotify.length > 0 ? (
+                        <div className="episodes-grid">
+                            {filteredSpotify.map(ep => (
+                                // ... Spotify episode item JSX ...
+                                <div key={ep.id} className="episode-item">
+                                    <img src={ep.images[1]?.url} alt={ep.name} />
+                                    <h3>{ep.name}</h3>
+                                    <p className="release-date">{new Date(ep.release_date).toDateString()}</p>
+                                    <details>
+                                        <summary>Show Description & Player</summary>
+                                        <p className="description">{ep.description}</p>
+                                        <iframe src={`https://open.spotify.com/embed/episode/${ep.id}`} width="100%" height="152" frameBorder="0" allow="encrypted-media" title={ep.name}></iframe>
+                                    </details>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p>No episodes found matching your search for "{searchQuery}".</p>
+                    )}
+                </section>
+            )}
+
+            {activeView === 'youtube' && (
+                <section>
+                    <h2>From YouTube</h2>
+                    {filteredYoutube.length > 0 ? (
+                        <div className="episodes-grid">
+                            {filteredYoutube.map(vid => (
+                                // ... YouTube episode item JSX ...
+                                <div key={vid.id.videoId} className="episode-item">
+                                    <img src={vid.snippet.thumbnails.medium.url} alt={vid.snippet.title} />
+                                    <h3>{vid.snippet.title}</h3>
+                                    <p className="release-date">{new Date(vid.snippet.publishedAt).toDateString()}</p>
+                                    <details>
+                                        <summary>Show Description & Player</summary>
+                                        <p className="description">{vid.snippet.description}</p>
+                                        <iframe width="100%" height="200" src={`https://www.youtube.com/embed/${vid.id.videoId}`} title={vid.snippet.title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                                    </details>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p>No videos found matching your search for "{searchQuery}".</p>
+                    )}
+                </section>
+            )}
         </div>
     );
 };

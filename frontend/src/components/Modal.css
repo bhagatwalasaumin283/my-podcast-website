@@ -1,0 +1,45 @@
+.modal-overlay {
+  position: fixed; /* Sits on top of the page content */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Dark, semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures it's on top */
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px; /* Control the max size */
+  height: 80vh; /* Takes up 80% of the viewport height */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative; /* Needed for positioning the close button */
+  display: flex; /* Helps the iframe fill the space */
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  color: #aaa;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-close-button:hover {
+  color: #333;
+}
+
+.modal-content iframe {
+  flex: 1; /* Make the iframe take all available space */
+  border: none;
+}

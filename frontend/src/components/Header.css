@@ -1,65 +1,68 @@
+/* 
+  We use justify-content: space-between to push the three items apart:
+  - The left spacer
+  - The center logo
+  - The right navigation
+*/
 .app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 5%; /* A little less vertical padding for a sleeker look */
-  background-color: #282c34;
+  padding: 2rem 5%; /* Adjusted padding */
+  background-image: linear-gradient(to bottom, #782104, #5f1612, #421116, #250e11, #000000);
   color: white;
 }
 
 /* 
-  This is the container for BOTH the logo and the title.
-  - display: flex makes its children (img and span) go side-by-side.
-  - align-items: center vertically centers them with each other.
-  - text-decoration: none removes the default blue underline from the link.
+  This rule is the magic. We tell both the spacer and the navigation
+  to be equally flexible and to have the same base width. This ensures
+  that they balance each other perfectly, leaving the logo in the middle.
 */
+.header-spacer, .header-nav {
+  flex: 1;
+  display: flex; /* Needed for alignment inside */
+}
+
+/* We tell the navigation to align its items to the right */
+.header-nav {
+  justify-content: flex-end;
+}
+
 .logo-container {
   display: flex;
   align-items: center;
-  text-decoration: none; 
+  text-decoration: none;
+  /* We remove the flex: 1 property from the logo so it only takes the space it needs */
 }
 
-/* 
-  This styles the logo image itself.
-  - height: 45px; controls the size. Adjust this value to make your logo bigger or smaller.
-  - margin-right: 15px; creates a nice gap between the logo and the text.
-  - object-fit: contain; ensures the image scales properly without being stretched or squashed.
-  - border-radius: 50%; makes a square image perfectly round. If your logo is not square,
-    try 'border-radius: 5px;' for slightly rounded corners instead.
-*/
 .logo-image {
-  height: 45px; 
-  width: 45px; /* Added to ensure it's a perfect circle */
+  height: 55px; 
+  width: 55px;
   margin-right: 15px; 
   object-fit: contain;
-  border-radius: 50%; /* Makes the logo circular */
-  background-color: #fff; /* Adds a white background if logo has transparency */
+  border-radius: 50%;
+  background-color: #fff;
 }
 
-/* 
-  This styles the title text.
-  - We ensure it's white, as the parent link color can sometimes interfere.
-*/
 .logo-text {
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   font-weight: bold;
   color: white; 
 }
 
-.app-header nav a {
-  margin: 0 1rem;
+.header-nav a { /* Changed from .app-header nav a */
+  margin: 0 0 0 1.5rem; /* Only add margin to the left of each link */
   color: #ccc;
   text-decoration: none;
   font-size: 1.1rem;
-  transition: color 0.2s ease-in-out; /* Adds a smooth color change on hover */
+  transition: color 0.2s ease-in-out;
 }
 
-/* Add a hover effect for better user experience */
-.app-header nav a:hover {
+.header-nav a:hover { /* Changed */
   color: #61dafb;
 }
 
-.app-header nav a.active {
+.header-nav a.active { /* Changed */
   color: #61dafb;
   font-weight: bold;
 }

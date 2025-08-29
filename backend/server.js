@@ -59,14 +59,14 @@ app.get('/api/bio', (req, res) => {
         companyBio: "All of us have a story to tell. We have our unique perspective towards life, its challenges, situations, etc. and this podcast is here to understand and share those perspectives with all of you. A podcast where hosts, Nikhil and Pranav seek to engage with people and have meaningful conversations to get insight into how they see life through their eyes. Join them on their journey, to build an atmosphere where people can be themselves, they can feel they've been heard and in the end, leave you with…A Little Perspective",
         hosts: [
             { 
-                name: "Host One", 
-                bio: "Bio of the first host, who specializes in cutting-edge technology.",
-                image: "/images/nikhil.png"
+                name: "Nikhil Kumar", 
+                bio: "Utterly curious guy who loves having meaningful conversations with people in this game called LIFE. You will find me in the gym, chiseling myself bit by bit everyday. I have been fortune enough to surround myself with like minded people who focus on the light they see not the darkness that surrounds them. Btw my name is Nikhil but you can call me Nick.",
+                image: "/images/nikhil.jpeg"
             },
             {  
-                name: "Host Two", 
-                bio: "Bio of the second host, who brings a creative perspective to the conversation.",
-                image: "/images/pranav.png"
+                name: "Pranav Sud", 
+                bio: "I am Pranav Kanwal Sud — a finance major at the University of Regina, almost at the finish line of my degree, and stepping into the worlds of finance and entrepreneurship. I also co-host A Little Perspective, a podcast where I get to sit down with people, hear their stories, and share lessons that stick. Outside of work and school, you will probably find me in the gym chasing PRs, running marathons, kicking a ball around on the soccer field, or hiking new trails. I\’m big on consistency, discipline, and always bettering myself — but I also love spending time with close friends and family. For me, it’s all about growth, connection, and finding balance between building big things and enjoying the little moments.",
+                image: "/images/pranav.jpeg"
             }
         ]
     });
@@ -105,15 +105,88 @@ app.get('/api/spotify-episodes', async (req, res) => {
 // Endpoint for YouTube videos from a given channel
 app.get('/api/youtube-videos', async (req, res) => {
     try {
-        const url = `https://www.googleapis.com/youtube/v3/search?key=${process.env.YOUTUBE_API_KEY}&channelId=${process.env.YOUTUBE_CHANNEL_ID}&part=snippet,id&order=date&maxResults=50`;
-        const response = await axios.get(url);
-        res.json(response.data);
+        const channelId = process.env.YOUTUBE_CHANNEL_ID;
+        if (!channelId) {
+            throw new Error("YouTube Channel ID is not defined in .env file");
+        }
+        
+        const uploadsPlaylistId = 'UU' + channelId.substring(2);
+
+        // --- STEP 1: Fetch ALL video IDs using a pagination loop ---
+        let allVideoIds = [];
+        let nextPageToken = null;
+        let pagesFetched = 0;
+        
+        console.log('Starting to fetch all YouTube video IDs...');
+
+        do {
+            // Construct the URL for the current page
+            let playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&key=${process.env.YOUTUBE_API_KEY}&maxResults=50`;
+            if (nextPageToken) {
+                playlistUrl += `&pageToken=${nextPageToken}`;
+            }
+
+            const playlistResponse = await axios.get(playlistUrl);
+            const data = playlistResponse.data;
+
+            // Add the IDs from this page to our master list
+            const idsFromThisPage = data.items
+                .map(item => item.snippet?.resourceId?.videoId)
+                .filter(id => id);
+            
+            allVideoIds.push(...idsFromThisPage);
+
+            // Get the token for the NEXT page
+            nextPageToken = data.nextPageToken;
+            pagesFetched++;
+            console.log(`Fetched page ${pagesFetched}. Total IDs so far: ${allVideoIds.length}`);
+
+        } while (nextPageToken); // Loop as long as there is a next page
+
+        console.log(`Finished fetching. Found ${allVideoIds.length} total video IDs.`);
+
+        if (allVideoIds.length === 0) {
+            return res.json({ items: [] });
+        }
+
+        // --- STEP 2: Get video details for ALL IDs (in batches of 50) ---
+        let allVideoDetails = [];
+        // YouTube API's 'videos' endpoint can only take 50 IDs at a time.
+        for (let i = 0; i < allVideoIds.length; i += 50) {
+            const idBatch = allVideoIds.slice(i, i + 50);
+            const videosUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${idBatch.join(',')}&key=${process.env.YOUTUBE_API_KEY}`;
+            const videosResponse = await axios.get(videosUrl);
+            allVideoDetails.push(...videosResponse.data.items);
+        }
+
+        // --- STEP 3: Filter out the Shorts from the complete list ---
+        const longFormVideos = allVideoDetails.filter(video => {
+            const duration = video.contentDetails.duration;
+            const durationRegex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
+            const matches = duration.match(durationRegex);
+            const hours = parseInt(matches[1] || 0);
+            const minutes = parseInt(matches[2] || 0);
+            const seconds = parseInt(matches[3] || 0);
+            const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+            return totalSeconds > 120; // Filter out videos under 70 seconds
+        });
+
+        // --- STEP 4: Format the final data for the frontend ---
+        const formattedVideos = longFormVideos.map(video => ({
+            snippet: video.snippet,
+            id: {
+                kind: "youtube#video",
+                videoId: video.id
+            }
+        }));
+
+        res.json({ items: formattedVideos });
+
     } catch (error) {
         console.error('Error fetching from YouTube:', error.response ? error.response.data : error.message);
         res.status(500).json({ error: 'Failed to fetch videos from YouTube' });
     }
 });
-
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

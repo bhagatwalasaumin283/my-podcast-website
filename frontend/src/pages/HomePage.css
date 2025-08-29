@@ -1,4 +1,11 @@
+body{
+background: #000000;
+}
+.home-page{
+  background: #000000;
+}
 .home-page h1 {
+  color: #ffffff;
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 1rem;
@@ -7,7 +14,7 @@
 .home-page p {
   text-align: center;
   font-size: 1.2rem;
-  color: #555;
+  color: #ffffff;
   margin-bottom: 3rem;
 }
 
@@ -18,8 +25,89 @@
 }
 
 .episode-card {
-  background: white;
+  background-color: hsl(0, 0%, 0%);
+  background-image: radial-gradient(ellipse closest-side at center, hsl(0, 0%, 31%) 0%, hsl(0, 0%, 0%) 100%);;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.EpTitle{
+  color: #ffffff;
+}
+
+/* --- STYLES FOR THE BIG TITLE PICTURE --- */
+.title-image-container {
+  position: relative; /* 1. This is CRUCIAL. It becomes the anchor for the icons. */
+  width: 100%;
+  text-align: center;
+  margin-bottom: 3rem;
+   /* ADD THIS LINE */
+}
+
+.title-image {
+  max-width: 150%;
+  height: auto;
+  max-height: 500px;
+}
+
+/* --- STYLES FOR THE SOCIAL ICONS --- */
+.social-links {
+  position: absolute; /* 2. Lifts the icons out of the normal flow */
+  top: -17px; /* 3. Positions the icons relative to the top edge of the container */
+  right: 245px; /* 4. Positions the icons relative to the right edge of the container */
+  
+  /* 5. This transform pushes the icons up and to the right of the corner */
+  transform: translate(25%, -50%); 
+
+  display: flex; /* Aligns the icons in a row */
+  gap: 1.5rem; /* Space between each icon */
+}
+
+/* Styling for the icon links */
+.social-links a {
+  color: #fff; /* White icons */
+  font-size: 2rem; /* Size of the icons */
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+/* Hover effect to make them interactive */
+.social-links a:hover {
+  color: #61dafb; /* A nice highlight color */
+  transform: scale(1.2); /* Makes the icon slightly bigger on hover */
+}
+
+.latest-episodes-container h2 {
+  /* This part is for text styling */
+  text-align: center; /* This ensures it's centered */
+  font-size: 2rem;
+  color: white; /* Keeps the text color white */
+  margin-bottom: 2rem;
+  padding-bottom: 1rem; /* Add some space between the text and the underline */
+
+  /* This part creates the underline */
+  position: relative; /* Required to position the underline correctly */
+  display: inline-block; /* Makes the element only as wide as its content */
+  left: 50%; /* Moves the start of the element to the center of the page */
+  transform: translateX(-50%); /* Pulls the element back by half its own width, perfectly centering it */
+}
+
+/* This ::after pseudo-element is the actual underline */
+.latest-episodes-container h2::after {
+  content: ''; /* This is required for pseudo-elements */
+  position: absolute;
+  bottom: 0; /* Position the line at the very bottom */
+  left: 0;
+  width: 100%; /* Make the line the full width of the text */
+  height: 2px; /* The thickness of the underline */
+  background-color: white; /* The color of the underline */
+  border-radius: 1px;
+}
+/* Target the "Latest from Spotify" and "Latest from YouTube" subtitles */
+.episode-card h3 {
+  color: white;
+}
+
+/* Target the actual episode titles */
+.episode-card h4 {
+  color: white;
 }

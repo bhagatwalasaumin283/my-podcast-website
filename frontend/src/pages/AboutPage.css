@@ -1,7 +1,8 @@
 .about-page {
   max-width: 800px;
   margin: 0 auto;
-  background: #fff;
+ background-color: hsl(0, 0%, 0%);
+  background-image: radial-gradient(ellipse closest-side at center, hsl(0, 0%, 31%) 0%, hsl(0, 0%, 0%) 100%);;
   padding: 2rem 3rem; /* More padding */
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -11,10 +12,13 @@
   font-size: 1.1rem;
   line-height: 1.7; /* Increased line height for readability */
   margin-bottom: 2.5rem;
-  color: #333;
+  color: #ffffff;
 }
-
+.about-page h1{
+  color: #fff;
+}
 .about-page h2 {
+  color: #fff;
   text-align: center;
   border-bottom: 2px solid #eee;
   padding-bottom: 1rem;
@@ -71,4 +75,27 @@
   .about-page {
     padding: 1.5rem;
   }
+}
+/* --- STYLES FOR CONTACT BUTTON --- */
+.contact-button-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.contact-button {
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+  background-image: linear-gradient(to right, #782104, #5f1612);
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.contact-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }

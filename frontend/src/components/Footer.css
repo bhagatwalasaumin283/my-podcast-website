@@ -1,7 +1,7 @@
 .app-footer {
   text-align: center;
-  padding: 1.5rem;
-  background-color: #20232a;
+  padding: 2rem;
+background-image: linear-gradient(to top, #782104, #5f1612, #421116, #250e11, #000000);
   color: #ccc;
   margin-top: auto; /* Pushes footer to the bottom */
 }

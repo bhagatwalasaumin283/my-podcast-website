@@ -3,6 +3,12 @@ import axios from 'axios';
 import LoadingSpinner from '../components/LoadingSpinner';
 import './HomePage.css';
 
+// 1. IMPORT THE ICONS YOU NEED
+import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
+
+// 2. IMPORT YOUR TITLE IMAGE
+import titleImage from '../assets/title.jpeg';
+
 const HomePage = () => {
     const [latestSpotify, setLatestSpotify] = useState(null);
     const [latestYouTube, setLatestYouTube] = useState(null);
@@ -10,24 +16,26 @@ const HomePage = () => {
 
     useEffect(() => {
         const fetchLatestEpisodes = async () => {
+            setLoading(true);
             try {
-                // Fetch latest Spotify episode
-                const spotifyRes = await axios.get('http://localhost:5001/api/spotify-episodes');
-                setLatestSpotify(spotifyRes.data.items[0]);
+                const [spotifyRes, youtubeRes] = await Promise.all([
+                    axios.get('http://localhost:5001/api/spotify-episodes'),
+                    axios.get('http://localhost:5001/api/youtube-videos')
+                ]);
 
-                // Fetch latest YouTube video
-                const youtubeRes = await axios.get('http://localhost:5001/api/youtube-videos');
-                // Ensure the item is a video before setting it
-                const firstVideo = youtubeRes.data.items.find(item => item.id.kind === "youtube#video");
-                setLatestYouTube(firstVideo);
-
+                if (spotifyRes.data?.items) {
+                    setLatestSpotify(spotifyRes.data.items[0]);
+                }
+                if (youtubeRes.data?.items?.length > 0) {
+                    const firstVideo = youtubeRes.data.items.find(item => item.id?.videoId);
+                    setLatestYouTube(firstVideo);
+                }
             } catch (error) {
                 console.error("Error fetching latest episodes", error);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchLatestEpisodes();
     }, []);
 
@@ -35,39 +43,50 @@ const HomePage = () => {
 
     return (
         <div className="home-page">
-            <h1>Welcome to the Podcast</h1>
-            <p>Listen to our latest episodes from Spotify and YouTube right here.</p>
             
-            <div className="latest-episodes">
-                {latestSpotify && (
+            {/* 3. WRAP THE IMAGE AND ICONS IN THE CONTAINER */}
+            <div className="title-image-container">
+                <img src={titleImage} alt="A Little Perspective Podcast Title" className="title-image" />
+
+                {/* 4. ADD THE SOCIAL LINKS CONTAINER */}
+                <div className="social-links">
+                    <a href="https://www.instagram.com/alittleperspective__/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <FaInstagram />
+                    </a>
+                    <a href="https://www.tiktok.com/@alittleperspectiv?_t=ZS-8yzqoRnpgS0&_r=1" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                        <FaTiktok />
+                    </a>
+                    <a href="https://www.youtube.com/@alittleperspective1626" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                        <FaYoutube />
+                    </a>
+                </div>
+            </div>
+
+            {/* THE LATEST PODCASTS SECTION */}
+            <div className="latest-episodes-container">
+                <h2>Latest Episodes</h2>
+                <div className="latest-episodes">
+                    {/* Spotify Card */}
                     <div className="episode-card">
                         <h3>Latest from Spotify</h3>
-                        <h4>{latestSpotify.name}</h4>
-                        <iframe 
-                            src={`https://open.spotify.com/embed/episode/${latestSpotify.id}`} 
-                            width="100%" 
-                            height="232" 
-                            frameBorder="0" 
-                            allow="encrypted-media"
-                            title="Spotify Player">
-                        </iframe>
+                        {latestSpotify ? (
+                            <>
+                                <h4>{latestSpotify.name}</h4>
+                                <iframe src={`https://open.spotify.com/embed/episode/${latestSpotify.id}`} width="100%" height="232" frameBorder="0" allow="encrypted-media" title="Spotify Player"></iframe>
+                            </>
+                        ) : ( <p>Could not load the latest episode.</p> )}
                     </div>
-                )}
-                {latestYouTube && (
+                    {/* YouTube Card */}
                     <div className="episode-card">
                         <h3>Latest from YouTube</h3>
-                        <h4>{latestYouTube.snippet.title}</h4>
-                        <iframe 
-                            width="100%" 
-                            height="315" 
-                            src={`https://www.youtube.com/embed/${latestYouTube.id.videoId}`} 
-                            title="YouTube video player" 
-                            frameBorder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowFullScreen>
-                        </iframe>
+                        {latestYouTube ? (
+                            <>
+                                <h4>{latestYouTube.snippet.title}</h4>
+                                <iframe width="100%" height="232" src={`https://www.youtube.com/embed/${latestYouTube.id.videoId}`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                            </>
+                        ) : ( <p>Could not load the latest video.</p> )}
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );
