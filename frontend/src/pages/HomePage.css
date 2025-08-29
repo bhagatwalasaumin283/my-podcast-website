@@ -111,3 +111,15 @@ background: #000000;
 .episode-card h4 {
   color: white;
 }
+@media screen and (max-width: 768px) {
+  /* Make the title image a bit smaller on mobile */
+  .host-banner-photo, .title-image {
+    width: 180px;
+    height: 180px;
+  }
+
+  /* Stack the latest episodes instead of side-by-side */
+  .latest-episodes {
+    grid-template-columns: 1fr;
+  }
+}

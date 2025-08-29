@@ -143,3 +143,9 @@
   height: 2px;
   background-color: #782104;
 }
+@media screen and (max-width: 480px) {
+  /* On very small screens, force the grid to be a single column */
+  .episodes-grid {
+    grid-template-columns: 1fr;
+  }
+}
