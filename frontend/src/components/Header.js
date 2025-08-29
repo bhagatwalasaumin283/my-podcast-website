@@ -1,30 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { FaBars, FaTimes } from 'react-icons/fa';
 import './Header.css';
-import podcastLogo from '../assets/logo.jpg'; // Make sure your logo path is correct
+import podcastLogo from '../assets/logo.jpg';
 
 const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+  
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  }
+
   return (
-    <header className="app-header">
-      {/* 
-        This empty div is the key. It will take up the same amount of space
-        as the <nav> element, pushing the logo container to the perfect center.
-      */}
-      <div className="header-spacer"></div>
+    <>
+      <header className="app-header">
+        <Link to="/" className="logo-container" onClick={closeMenu}> 
+          <img src={podcastLogo} alt="Podcast logo" className="logo-image" />
+          <span className="logo-text">A Little Perspective</span>
+        </Link>
 
-      {/* The logo and title container remains the same */}
-      <Link to="/" className="logo-container"> 
-        <img src={podcastLogo} alt="Podcast logo" className="logo-image" />
-        <span className="logo-text">A Little Perspective</span>
-      </Link>
+        {/* This is the regular desktop navigation */}
+        <nav className="header-nav">
+          <NavLink to="/" end>Home</NavLink>
+          <NavLink to="/episodes">Episodes</NavLink>
+          <NavLink to="/about">About</NavLink>
+        </nav>
 
-      {/* The navigation remains the same */}
-      <nav className="header-nav">
-        <NavLink to="/" end>Home</NavLink>
-        <NavLink to="/episodes">Episodes</NavLink>
-        <NavLink to="/about">About</NavLink>
+        {/* This is the hamburger icon */}
+        <div className="menu-icon" onClick={toggleMenu}>
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </div>
+      </header>
+      
+      {/* This is the separate sliding mobile menu */}
+      <nav className={`mobile-nav-menu ${isMenuOpen ? 'active' : ''}`}>
+        <NavLink to="/" end onClick={closeMenu}>Home</NavLink>
+        <NavLink to="/episodes" onClick={closeMenu}>Episodes</NavLink>
+        <NavLink to="/about" onClick={closeMenu}>About</NavLink>
       </nav>
-    </header>
+    </>
   );
 };
 

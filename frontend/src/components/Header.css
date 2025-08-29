@@ -1,119 +1,88 @@
-/* 
-  We use justify-content: space-between to push the three items apart:
-  - The left spacer
-  - The center logo
-  - The right navigation
-*/
 .app-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Center the logo by default */
   align-items: center;
-  padding: 2rem 5%; /* Adjusted padding */
-  background-image: linear-gradient(to bottom, #782104, #5f1612, #421116, #250e11, #000000);
+  padding: 0.75rem 5%;
+  background-image: linear-gradient(to bottom, #782104, #5f1612, #421116, #250e11, #141414);
   color: white;
+  position: relative;
+  z-index: 1000;
 }
 
-/* 
-  This rule is the magic. We tell both the spacer and the navigation
-  to be equally flexible and to have the same base width. This ensures
-  that they balance each other perfectly, leaving the logo in the middle.
-*/
-.header-spacer, .header-nav {
-  flex: 1;
-  display: flex; /* Needed for alignment inside */
-}
-
-/* We tell the navigation to align its items to the right */
+/* DESKTOP NAV: Appears on the right side on large screens */
 .header-nav {
-  justify-content: flex-end;
+  display: none; /* Hidden by default (mobile-first) */
 }
 
 .logo-container {
   display: flex;
   align-items: center;
   text-decoration: none;
-  /* We remove the flex: 1 property from the logo so it only takes the space it needs */
 }
+/* ... other logo styles ... */
+.logo-image { height: 45px; width: 45px; margin-right: 15px; border-radius: 50%; background-color: #fff; }
+.logo-text { font-size: 1.5rem; font-weight: bold; color: white; }
 
-.logo-image {
-  height: 55px; 
-  width: 55px;
-  margin-right: 15px; 
-  object-fit: contain;
-  border-radius: 50%;
-  background-color: #fff;
-}
 
-.logo-text {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: white; 
-}
-
-.header-nav a { /* Changed from .app-header nav a */
-  margin: 0 0 0 1.5rem; /* Only add margin to the left of each link */
-  color: #ccc;
-  text-decoration: none;
-  font-size: 1.1rem;
-  transition: color 0.2s ease-in-out;
-}
-
-.header-nav a:hover { /* Changed */
-  color: #61dafb;
-}
-
-.header-nav a.active { /* Changed */
-  color: #61dafb;
-  font-weight: bold;
-}
-
-@media screen and (max-width: 768px) {
-  /* Show the hamburger menu icon */
-  .menu-icon {
-    display: block;
-    position: absolute; /* Position it relative to the header */
-    top: 50%;
-    right: 5%;
-    transform: translateY(-50%);
-  }
-  /* --- MOBILE MENU STYLES --- */
+/* MOBILE MENU ICON: Always visible on mobile, hidden on desktop */
 .menu-icon {
-  display: none; /* Hide hamburger menu on desktop */
+  display: block;
   font-size: 1.8rem;
   cursor: pointer;
-  z-index: 1001; /* Make sure it's on top */
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  z-index: 1001;
+  color: #fff;
 }
 
-  /* Hide the desktop nav links and the spacer */
-  .header-nav {
-    display: flex;
-    flex-direction: column; /* Stack links vertically */
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh; /* Full screen height */
-    background: #141414; /* Same as the header background */
-    position: absolute;
-    top: 0;
-    left: -100%; /* Start off-screen to the left */
-    transition: left 0.3s ease-in-out;
-  }
-  
-  /* When the nav has the 'active' class, slide it into view */
-  .header-nav.active {
-    left: 0;
-  }
-  
-  .header-nav a {
-    font-size: 2rem;
-    margin: 2rem 0; /* Space out the links vertically */
-  }
+/* The sliding menu itself */
+.mobile-nav-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background: #141414;
+  position: fixed;
+  top: 0;
+  left: -100%; /* Start off-screen */
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+}
+.mobile-nav-menu.active {
+  left: 0; /* Slide in */
+}
+.mobile-nav-menu a {
+  font-size: 2rem;
+  margin: 2rem 0;
+  color: #ccc;
+  text-decoration: none;
+}
 
-  /* On mobile, remove the spacer and just center the logo */
-  .header-spacer {
-    display: none;
-  }
+/* MEDIA QUERY FOR DESKTOP */
+@media screen and (min-width: 769px) {
   .app-header {
-    justify-content: center;
+    justify-content: space-between; /* Switch to space-between on desktop */
+  }
+  .menu-icon {
+    display: none; /* Hide hamburger on desktop */
+  }
+  .header-nav {
+    display: flex; /* Show desktop nav */
+  }
+  .header-nav a {
+    margin-left: 1.5rem;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 1.1rem;
+  }
+  .header-nav a:hover, .header-nav a.active {
+    color: #61dafb;
+  }
+  .mobile-nav-menu {
+    display: none; /* Hide the sliding menu on desktop */
   }
 }
