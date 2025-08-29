@@ -1,0 +1,15 @@
+# Netlify configuration file
+
+[build]
+  # UPDATED COMMAND:
+  # 1. Install dependencies for the backend function
+  # 2. THEN, build the React frontend
+  command = "cd netlify/functions && npm install && cd ../../frontend && npm install && npm run build"
+  
+  publish = "frontend/build"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/server/:splat"
+  status = 200
