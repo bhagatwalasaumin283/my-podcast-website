@@ -3,6 +3,8 @@ import axios from 'axios';
 import LoadingSpinner from '../components/LoadingSpinner';
 import './HomePage.css';
 
+// 1. IMPORT THE ICONS AND TITLE IMAGE
+import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import titleImage from '../assets/title.png';
 
 const HomePage = () => {
@@ -19,16 +21,15 @@ const HomePage = () => {
                     axios.get('/api/youtube-videos')
                 ]);
 
-                // --- THIS IS THE FIX ---
-                // We will search for the first valid episode, not just grab the first one.
+                // Find the first valid Spotify episode
                 if (spotifyRes.data?.items) {
                     const firstValidEpisode = spotifyRes.data.items.find(ep => 
                         ep && ep.id && ep.name && ep.images && ep.images.length > 0
                     );
                     setLatestSpotify(firstValidEpisode);
                 }
-                // ------------------------
-
+                
+                // Find the first valid YouTube video
                 if (youtubeRes.data?.items?.length > 0) {
                     const firstValidVideo = youtubeRes.data.items.find(item => item?.id?.videoId);
                     setLatestYouTube(firstValidVideo);
@@ -48,17 +49,25 @@ const HomePage = () => {
         <div className="home-page">
             <div className="title-image-container">
                 <img src={titleImage} alt="A Little Perspective Podcast Title" className="title-image" />
+                
+                {/* 2. RESTORED SOCIAL LINKS SECTION */}
                 <div className="social-links">
                     <a href="https://www.instagram.com/your-username" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                        {/* Icons here */}
+                        <FaInstagram />
                     </a>
-                    {/* ... other icons */}
+                    <a href="https://www.tiktok.com/@your-username" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                        <FaTiktok />
+                    </a>
+                    <a href="https://www.youtube.com/@alittleperspective1626" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                        <FaYoutube />
+                    </a>
                 </div>
             </div>
 
             <div className="latest-episodes-container">
                 <h2>Latest Episodes</h2>
                 <div className="latest-episodes">
+                    {/* Spotify Card */}
                     <div className="episode-card">
                         <h3>Latest from Spotify</h3>
                         {latestSpotify ? (
@@ -68,6 +77,7 @@ const HomePage = () => {
                             </>
                         ) : ( <p>Could not load the latest episode from Spotify.</p> )}
                     </div>
+                    {/* YouTube Card */}
                     <div className="episode-card">
                         <h3>Latest from YouTube</h3>
                         {latestYouTube ? (

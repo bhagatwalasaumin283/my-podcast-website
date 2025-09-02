@@ -123,3 +123,35 @@ background: #000000;
     grid-template-columns: 1fr;
   }
 }
+/* ======================================= */
+/* --- MEDIA QUERY FOR MOBILE DEVICES --- */
+/* ======================================= */
+
+/* These styles will only apply when the screen width is 768px or less */
+@media screen and (max-width: 768px) {
+
+  /* 
+    This is the fix for the squished image.
+    We remove the max-height constraint on mobile and let the
+    image scale naturally with the width of the screen.
+  */
+  .title-image {
+    max-height: none; /* Remove the height limit on small screens */
+  }
+
+  /* Let's make the icons a bit smaller and reposition them for mobile */
+  .social-links {
+    gap: 1.2rem; /* Reduce space between icons */
+    /* Adjust position slightly to look better on a smaller image */
+    transform: translate(20%, -50%); 
+  }
+
+  .social-links a {
+    font-size: 1.8rem; /* Make icons slightly smaller */
+  }
+  
+  /* Make the "Latest Episodes" grid stack into a single column */
+  .latest-episodes {
+    grid-template-columns: 1fr;
+  }
+}
