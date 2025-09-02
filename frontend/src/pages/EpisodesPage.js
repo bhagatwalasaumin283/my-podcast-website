@@ -22,31 +22,37 @@ const EpisodesPage = () => {
 
     // This effect runs only ONCE to fetch all initial data
     useEffect(() => {
-        const fetchAllEpisodes = async () => {
-            setLoading(true);
-            try {
-                const [spotifyRes, youtubeRes] = await Promise.all([
-                    axios.get('/api/spotify-episodes'),
-                    axios.get('/api/youtube-videos')
-                ]);
+    const fetchAllEpisodes = async () => {
+        setLoading(true);
+        try {
+            const [spotifyRes, youtubeRes] = await Promise.all([
+                axios.get('/api/spotify-episodes'),
+                axios.get('/api/youtube-videos')
+            ]);
 
-                if (spotifyRes.data && spotifyRes.data.items) {
-                    setAllSpotifyEpisodes(spotifyRes.data.items);
-                    setFilteredSpotify(spotifyRes.data.items); // Set initial display list
-                }
-                if (youtubeRes.data && youtubeRes.data.items) {
-                    setAllYoutubeVideos(youtubeRes.data.items);
-                    setFilteredYoutube(youtubeRes.data.items); // Set initial display list
-                }
-            } catch (error) {
-                console.error("Failed to fetch episodes:", error);
-            } finally {
-                setLoading(false);
+            // --- THIS IS THE FIX ---
+            // Before we set the state, we will filter out any invalid items
+            if (spotifyRes.data?.items) {
+                const validSpotifyEpisodes = spotifyRes.data.items.filter(ep => ep && ep.images && ep.images.length > 0);
+                setAllSpotifyEpisodes(validSpotifyEpisodes);
+                setFilteredSpotify(validSpotifyEpisodes);
             }
-        };
+            if (youtubeRes.data?.items) {
+                const validYoutubeVideos = youtubeRes.data.items.filter(vid => vid && vid.snippet);
+                setAllYoutubeVideos(validYoutubeVideos);
+                setFilteredYoutube(validYoutubeVideos);
+            }
+            // ------------------------
 
-        fetchAllEpisodes();
-    }, []);
+        } catch (error) {
+            console.error("Failed to fetch episodes:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchAllEpisodes();
+}, []);
 
     // This effect runs whenever the user types in the search bar
     useEffect(() => {
