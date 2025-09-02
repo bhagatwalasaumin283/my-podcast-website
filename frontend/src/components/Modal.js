@@ -6,7 +6,7 @@ const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdM1RK1wu1FDaG
 
 const Modal = ({ isOpen, onClose }) => {
   // If the modal is not open, render nothing
-  if (!isOpen) {88767
+  if (!isOpen) {
     return null;
   }
 
