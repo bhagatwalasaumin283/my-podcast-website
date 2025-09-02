@@ -98,11 +98,16 @@
   gap: 2rem;
 }
 
+/* In frontend/src/pages/HomePage.css */
+
 .episode-card {
-  background-color: hsl(0, 0%, 0%);
-  background-image: radial-gradient(ellipse closest-side at center, hsl(0, 0%, 31%) 0%, hsl(0, 0%, 0%) 100%);
+  /* THIS IS THE FIX: We are changing the background property */
+  background-color: #000000;
+  background-image: radial-gradient(ellipse at center, hsl(0, 0%, 25%) 0%, hsl(0, 0%, 0%) 100%);
+
   padding: 1.5rem;
   border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05); /* A subtle glow for dark theme */
 }
 
 .episode-card h3, .episode-card h4 {
