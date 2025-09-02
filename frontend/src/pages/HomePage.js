@@ -48,10 +48,10 @@ const HomePage = () => {
             <div className="title-image-container">
                 <img src={titleImage} alt="A Little Perspective Podcast Title" className="title-image" />
                 <div className="social-links">
-                    <a href="https://www.instagram.com/your-username" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <a href="https://www.instagram.com/alittleperspective__" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                         <FaInstagram />
                     </a>
-                    <a href="https://www.tiktok.com/@your-username" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                    <a href="https://www.tiktok.com/@alittleperspectiv?_t=ZS-8yzqoRnpgS0&_r=1" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
                         <FaTiktok />
                     </a>
                     <a href="https://www.youtube.com/@alittleperspective1626" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
