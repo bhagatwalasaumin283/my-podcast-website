@@ -46,6 +46,7 @@ const HomePage = () => {
     return (
         <div className="home-page">
             <div className="title-image-container">
+                <img src={titleImage} alt="A Little Perspective Podcast Title" className="title-image" />
                 <div className="social-links">
                     <a href="https://www.instagram.com/your-username" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                         <FaInstagram />
@@ -57,7 +58,6 @@ const HomePage = () => {
                         <FaYoutube />
                     </a>
                 </div>
-                <img src={titleImage} alt="A Little Perspective Podcast Title" className="title-image" />
             </div>
 
             <div className="latest-episodes-container">

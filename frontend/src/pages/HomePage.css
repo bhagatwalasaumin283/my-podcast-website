@@ -4,33 +4,31 @@
 }
 
 /* ================================================================= */
-/* --- STYLES FOR THE HERO SECTION (TITLE IMAGE AND ICONS) --- */
+/* --- DESKTOP STYLES (Default for screens > 768px) --- */
 /* ================================================================= */
+
+/* The container is an anchor for the absolutely positioned icons */
 .title-image-container {
-  display: grid; /* Use CSS Grid for robust layout */
-  grid-template-columns: 1fr; /* A single column layout */
-  justify-items: center; /* Center all items horizontally */
-  gap: 1.5rem; /* This creates the space between the icons and the image */
-  margin-bottom: 3rem; /* Space below the hero section */
-  padding-top: 1rem; /* A little space at the very top */
+  position: relative;
+  width: 100%;
+  max-width: 900px; /* Control max size on desktop */
+  margin: 0 auto 3rem auto; /* Center the container and add bottom margin */
 }
 
-/* We explicitly place the social links in the first row of our grid */
-.social-links {
-  grid-row: 1;
-  display: flex;
-  gap: 2rem; /* The space between each icon */
-}
-
-/* We explicitly place the title image in the second row of our grid */
 .title-image {
-  grid-row: 2;
-  width: 100%; /* Make the image responsive to its container's width */
-  max-width: 800px; /* Limit the maximum size on large desktop screens */
-  height: auto; /* THIS IS THE FIX: Ensures the image is never squished */
+  width: 100%; /* Image is responsive to the container */
+  height: auto; /* Prevents squishing */
 }
 
-/* Styling for the icon links */
+/* Icons are positioned over the image on desktop */
+.social-links {
+  position: absolute;
+  top: 15px; /* Adjust vertical position */
+  right: 15px; /* Adjust horizontal position */
+  display: flex;
+  gap: 1.5rem;
+}
+
 .social-links a {
   color: #fff;
   font-size: 2rem;
@@ -40,6 +38,32 @@
 .social-links a:hover {
   color: #61dafb;
   transform: scale(1.1);
+}
+
+
+/* ================================================================= */
+/* --- MOBILE STYLES (for screens <= 768px) --- */
+/* ================================================================= */
+@media screen and (max-width: 768px) {
+  
+  /* On mobile, we switch to a grid layout */
+  .title-image-container {
+    position: static; /* Turn off absolute positioning context */
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem; /* The gap between the icons and the image */
+  }
+
+  /* The icons are no longer absolutely positioned */
+  .social-links {
+    position: static; /* Puts icons back in the normal flow */
+    grid-row: 1; /* Place icons in the first row */
+    font-size: 1.8rem; /* Make icons slightly smaller on mobile */
+  }
+
+  .title-image {
+    grid-row: 2; /* Place image in the second row */
+  }
 }
 
 
@@ -66,12 +90,11 @@
   width: 100%;
   height: 2px;
   background-color: white;
-  border-radius: 1px;
 }
 
 .latest-episodes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Adjusted for better mobile fit */
   gap: 2rem;
 }
 
