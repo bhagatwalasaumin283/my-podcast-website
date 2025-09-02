@@ -1,4 +1,7 @@
 /* Apply the black background to the entire page */
+body{
+  background-color: #000000;
+}
 .home-page {
   background: #000000;
 }
