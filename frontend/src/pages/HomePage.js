@@ -5,7 +5,7 @@ import './HomePage.css';
 
 // IMPORT THE ICONS AND TITLE IMAGE
 import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
-import titleImage from '../assets/title.png';
+import titleImage from '../assets/title.jpeg';
 
 const HomePage = () => {
     const [latestSpotify, setLatestSpotify] = useState(null);
