@@ -1,21 +1,72 @@
-body{
-background: #000000;
-}
-.home-page{
+/* Apply the black background to the entire page */
+.home-page {
   background: #000000;
 }
-.home-page h1 {
-  color: #ffffff;
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+
+/* ================================================================= */
+/* --- STYLES FOR THE HERO SECTION (TITLE IMAGE AND ICONS) --- */
+/* ================================================================= */
+.title-image-container {
+  display: grid; /* Use CSS Grid for robust layout */
+  grid-template-columns: 1fr; /* A single column layout */
+  justify-items: center; /* Center all items horizontally */
+  gap: 1.5rem; /* This creates the space between the icons and the image */
+  margin-bottom: 3rem; /* Space below the hero section */
+  padding-top: 1rem; /* A little space at the very top */
 }
 
-.home-page p {
+/* We explicitly place the social links in the first row of our grid */
+.social-links {
+  grid-row: 1;
+  display: flex;
+  gap: 2rem; /* The space between each icon */
+}
+
+/* We explicitly place the title image in the second row of our grid */
+.title-image {
+  grid-row: 2;
+  width: 100%; /* Make the image responsive to its container's width */
+  max-width: 800px; /* Limit the maximum size on large desktop screens */
+  height: auto; /* THIS IS THE FIX: Ensures the image is never squished */
+}
+
+/* Styling for the icon links */
+.social-links a {
+  color: #fff;
+  font-size: 2rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.social-links a:hover {
+  color: #61dafb;
+  transform: scale(1.1);
+}
+
+
+/* ================================================================= */
+/* --- STYLES FOR THE LATEST EPISODES SECTION --- */
+/* ================================================================= */
+.latest-episodes-container h2 {
   text-align: center;
-  font-size: 1.2rem;
-  color: #ffffff;
-  margin-bottom: 3rem;
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.latest-episodes-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  border-radius: 1px;
 }
 
 .latest-episodes {
@@ -26,132 +77,11 @@ background: #000000;
 
 .episode-card {
   background-color: hsl(0, 0%, 0%);
-  background-image: radial-gradient(ellipse closest-side at center, hsl(0, 0%, 31%) 0%, hsl(0, 0%, 0%) 100%);;
+  background-image: radial-gradient(ellipse closest-side at center, hsl(0, 0%, 31%) 0%, hsl(0, 0%, 0%) 100%);
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-.EpTitle{
-  color: #ffffff;
 }
 
-/* --- STYLES FOR THE BIG TITLE PICTURE --- */
-.title-image-container {
-  position: relative; /* 1. This is CRUCIAL. It becomes the anchor for the icons. */
-  width: 100%;
-  text-align: center;
-  margin-bottom: 3rem;
-   /* ADD THIS LINE */
-}
-
-.title-image {
-  max-width: 150%;
-  height: auto;
-  max-height: 500px;
-}
-
-/* --- STYLES FOR THE SOCIAL ICONS --- */
-.social-links {
-  position: absolute; /* 2. Lifts the icons out of the normal flow */
-  top: -17px; /* 3. Positions the icons relative to the top edge of the container */
-  right: 245px; /* 4. Positions the icons relative to the right edge of the container */
-  
-  /* 5. This transform pushes the icons up and to the right of the corner */
-  transform: translate(25%, -50%); 
-
-  display: flex; /* Aligns the icons in a row */
-  gap: 1.5rem; /* Space between each icon */
-}
-
-/* Styling for the icon links */
-.social-links a {
-  color: #fff; /* White icons */
-  font-size: 2rem; /* Size of the icons */
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-/* Hover effect to make them interactive */
-.social-links a:hover {
-  color: #61dafb; /* A nice highlight color */
-  transform: scale(1.2); /* Makes the icon slightly bigger on hover */
-}
-
-.latest-episodes-container h2 {
-  /* This part is for text styling */
-  text-align: center; /* This ensures it's centered */
-  font-size: 2rem;
-  color: white; /* Keeps the text color white */
-  margin-bottom: 2rem;
-  padding-bottom: 1rem; /* Add some space between the text and the underline */
-
-  /* This part creates the underline */
-  position: relative; /* Required to position the underline correctly */
-  display: inline-block; /* Makes the element only as wide as its content */
-  left: 50%; /* Moves the start of the element to the center of the page */
-  transform: translateX(-50%); /* Pulls the element back by half its own width, perfectly centering it */
-}
-
-/* This ::after pseudo-element is the actual underline */
-.latest-episodes-container h2::after {
-  content: ''; /* This is required for pseudo-elements */
-  position: absolute;
-  bottom: 0; /* Position the line at the very bottom */
-  left: 0;
-  width: 100%; /* Make the line the full width of the text */
-  height: 2px; /* The thickness of the underline */
-  background-color: white; /* The color of the underline */
-  border-radius: 1px;
-}
-/* Target the "Latest from Spotify" and "Latest from YouTube" subtitles */
-.episode-card h3 {
+.episode-card h3, .episode-card h4 {
   color: white;
-}
-
-/* Target the actual episode titles */
-.episode-card h4 {
-  color: white;
-}
-@media screen and (max-width: 768px) {
-  /* Make the title image a bit smaller on mobile */
-  .host-banner-photo, .title-image {
-    width: 180px;
-    height: 180px;
-  }
-
-  /* Stack the latest episodes instead of side-by-side */
-  .latest-episodes {
-    grid-template-columns: 1fr;
-  }
-}
-/* ======================================= */
-/* --- MEDIA QUERY FOR MOBILE DEVICES --- */
-/* ======================================= */
-
-/* These styles will only apply when the screen width is 768px or less */
-@media screen and (max-width: 768px) {
-
-  /* 
-    This is the fix for the squished image.
-    We remove the max-height constraint on mobile and let the
-    image scale naturally with the width of the screen.
-  */
-  .title-image {
-    max-height: none; /* Remove the height limit on small screens */
-  }
-
-  /* Let's make the icons a bit smaller and reposition them for mobile */
-  .social-links {
-    gap: 1.2rem; /* Reduce space between icons */
-    /* Adjust position slightly to look better on a smaller image */
-    transform: translate(20%, -50%); 
-  }
-
-  .social-links a {
-    font-size: 1.8rem; /* Make icons slightly smaller */
-  }
-  
-  /* Make the "Latest Episodes" grid stack into a single column */
-  .latest-episodes {
-    grid-template-columns: 1fr;
-  }
 }
